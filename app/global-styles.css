@@ -1,0 +1,23 @@
+#app {
+  height: 100%;
+}
+@font-face {
+  font-family: 'MonospaceNew';
+  src: url('./vendor/fonts/monospace.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0px;
+  font-family: 'MonospaceNew';
+  .connectModal {
+    max-width: 600px !important;
+  }
+}
+
+.identicon {
+  border-radius: 50px;
+}
