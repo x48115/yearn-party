@@ -13,9 +13,6 @@ body {
   width: 100%;
   margin: 0px;
   font-family: 'MonospaceNew';
-  .connectModal {
-    max-width: 600px !important;
-  }
 }
 
 .identicon {
