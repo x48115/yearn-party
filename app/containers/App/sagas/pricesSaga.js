@@ -4,10 +4,7 @@ import * as s from '../selectors';
 import * as a from '../actions';
 import * as c from '../constants';
 
-// Polling disabled
-// const pollPeriod = 30000;
-
-export function* poll() {
+export function* getPrices() {
   const vaults = yield r.select(s.selectVaults());
   const flatVaults = _.map(vaults, vault => vault);
   const reduceResponse = (acc, resp, tokenAddress) => {
@@ -38,5 +35,5 @@ export function* startLoadingPrices() {
 
 export default function* initialize() {
   yield r.takeLatest(c.VAULTS_LOADED, startLoadingPrices);
-  yield r.takeLatest(c.START_LOADING_PRICES, poll);
+  yield r.takeLatest(c.START_LOADING_PRICES, getPrices);
 }

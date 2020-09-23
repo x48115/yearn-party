@@ -4,20 +4,30 @@ import * as s from '../selectors';
 import * as a from '../actions';
 import * as c from '../constants';
 
-// Polling disabled
-// const pollPeriod = 30000;
+const pollPeriod = 60 * 1000 * 60; // Minutes
 
 export function* poll() {
   const account = yield r.select(s.selectAccount());
-  try {
-    const url = `https://dev-api.yearn.tools/user/${account}/vaults?apy=true&statistics=true`;
-    const vaults = yield r.call(request, url);
-    yield r.put(a.vaultsLoaded(vaults));
-  } catch (err) {
-    console.log('Error reading prices', err);
+  while (true) {
+    try {
+      const url = `https://dev-api.yearn.tools/user/${account}/vaults?apy=true&statistics=true`;
+      const vaults = yield r.call(request, url);
+      yield r.put(a.vaultsLoaded(vaults));
+    } catch (err) {
+      console.log('Error reading prices', err);
+    }
+    yield r.delay(pollPeriod);
   }
 }
 
+export function* startPolling() {
+  yield r.put(a.startLoadingVaults());
+}
+
 export default function* initialize() {
-  yield r.takeLatest(c.CONNECTION_CONNECTED, poll);
+  yield r.takeLatest(c.CONNECTION_UPDATED, startPolling);
+  while (true) {
+    yield r.take(c.START_LOADING_VAULTS);
+    yield r.race([r.call(poll), r.take(c.CONNECTION_UPDATED)]);
+  }
 }

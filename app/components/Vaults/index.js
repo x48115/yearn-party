@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import Vault from 'components/Vault';
 import CountUp from 'react-countup';
 import BigNumber from 'bignumber.js';
+import { currencyTransform } from 'utils/string';
 
 import * as s from 'containers/App/selectors';
 
@@ -26,7 +27,7 @@ const EarningsLabel = styled.div`
 
 const EarningsText = styled.div`
   font-weight: bold;
-  font-size: 90px;
+  font-size: 73px;
 `;
 
 const Earnings = styled.div`
@@ -36,8 +37,12 @@ const Earnings = styled.div`
   align-items: center;
 `;
 
-const Vaults = styled.div`
+const Vaults = styled.table`
   margin-top: 50px;
+`;
+
+const Disclaimer = styled.div`
+  text-align: center;
 `;
 
 export default function Component() {
@@ -46,7 +51,7 @@ export default function Component() {
   let totalCounter;
 
   const getFutureEarningsPerHour = (currentAmount, apy) => {
-    const apyRatePerHour = apy / 365 / 24;
+    const apyRatePerHour = apy / 100 / 365 / 24;
     const futureEarningsPerHour = currentAmount * apyRatePerHour;
     return futureEarningsPerHour;
   };
@@ -70,19 +75,28 @@ export default function Component() {
           <span role="img" aria-label="party">
             🥳
           </span>
-          {'  '}
+          {'  '}$
           <CountUp
             start={totalVaultEarningsUsd}
             end={futureAmount}
             duration={nbrSecondsInHour}
             separator=","
-            decimals={5}
-          />
-          ${' '}
+            useEasing={false}
+            decimals={8}
+          />{' '}
           <span role="img" aria-label="party">
             🥳
           </span>
         </EarningsText>
+        <Disclaimer>
+          Price estimate based on aggregate APY of{' '}
+          <b>{aggregateApy.toFixed(4)}%</b> on{' '}
+          <b>{currencyTransform(parseFloat(totalDepositedAmountUsd))}</b> -{' '}
+          {currencyTransform(parseFloat(futureEarningsPerHour * 24))}
+          /day
+          <br />
+          If you refresh the page too quickly your earnings will reset.
+        </Disclaimer>
       </Earnings>
     );
   }
@@ -102,7 +116,9 @@ export default function Component() {
   return (
     <Wrapper>
       <Totals>{totalCounter}</Totals>
-      <Vaults>{vaultsEl}</Vaults>
+      <Vaults>
+        <tbody>{vaultsEl}</tbody>
+      </Vaults>
     </Wrapper>
   );
 }

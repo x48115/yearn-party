@@ -42,7 +42,7 @@ const appReducer = (state = initialState, action) =>
       if (priceUsd && earnings) {
         vault.earningsUsd = new BigNumber(earnings).times(priceUsd).toFixed();
       }
-      if (depositedAmount) {
+      if (priceUsd && depositedAmount) {
         vault.depositedAmountUsd = new BigNumber(depositedAmount)
           .dividedBy(10 ** 18)
           .times(priceUsd)

@@ -5,33 +5,11 @@ import CountUp from 'react-countup';
 import ValueWithLabel from 'components/ValueWithLabel';
 import { balanceTransform, roundFloat } from 'utils/string';
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 70px;
+const Td = styled.td`
+  padding: 20px 20px;
 `;
 
-const VaultNameWrapper = styled.div`
-  width: 240px;
-`;
-
-const Apy = styled.div`
-  width: 100px;
-`;
-
-const VaultSummary = styled.div`
-  display: flex;
-  grid-gap: 50px;
-`;
-
-const Earnings = styled.div`
-  width: 300px;
-`;
-
-const Deposits = styled.div`
-  width: 300px;
-`;
+const Wrapper = styled.tr``;
 
 const AmountCounter = styled.div``;
 
@@ -44,7 +22,7 @@ export default function Component(props) {
     depositedAmount,
   } = vault;
 
-  const apyRatePerHour = apyOneWeekSample / 365 / 24;
+  const apyRatePerHour = apyOneWeekSample / 100 / 365 / 24;
   const nbrSecondsInHour = 3600;
 
   const addSymbol = amount => `${amount} ${tokenSymbolAlias}`;
@@ -60,6 +38,7 @@ export default function Component(props) {
 
   const getFutureEarningsPerHour = () => {
     const currentAmount = balanceTransform(depositedAmount);
+
     const futureEarningsPerHour = currentAmount * apyRatePerHour;
     return futureEarningsPerHour;
   };
@@ -76,7 +55,8 @@ export default function Component(props) {
         end={futureEarnings}
         duration={nbrSecondsInHour}
         separator=","
-        decimals={6}
+        useEasing={false}
+        decimals={10}
       />{' '}
       {tokenSymbolAlias}
     </AmountCounter>
@@ -84,23 +64,21 @@ export default function Component(props) {
 
   return (
     <Wrapper>
-      <VaultSummary>
-        <VaultNameWrapper>
-          <VaultIconAndName vault={vault} />
-        </VaultNameWrapper>
-        <Apy>
-          <ValueWithLabel
-            label="ROI:"
-            value={`${roundFloat(apyOneWeekSample, 2)}%`}
-          />
-        </Apy>
-        <Deposits>
-          <ValueWithLabel label="Deposited:" value={deposited} />
-        </Deposits>
-        <Earnings>
-          <ValueWithLabel label="Earnings:" value={vaultEarnings} />
-        </Earnings>
-      </VaultSummary>
+      <Td>
+        <VaultIconAndName vault={vault} />
+      </Td>
+      <Td>
+        <ValueWithLabel
+          label="ROI:"
+          value={`${roundFloat(apyOneWeekSample, 2)}%`}
+        />
+      </Td>
+      <Td>
+        <ValueWithLabel label="Deposited:" value={deposited} />
+      </Td>
+      <Td>
+        <ValueWithLabel label="Earnings:" value={vaultEarnings} />
+      </Td>
     </Wrapper>
   );
 }

@@ -11,7 +11,7 @@ const ButtonWrap = styled.div`
 `;
 
 const Button = styled.button`
-  width: 180px;
+  white-space: nowrap;
   margin: 10px;
   padding: 5px;
   &:focus {

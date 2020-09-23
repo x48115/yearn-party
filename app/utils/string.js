@@ -29,6 +29,16 @@ export const roundFloat = (val, digits) => {
     .toString();
 };
 
+export const currencyTransform = (val, digits) => {
+  const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: digits || 2,
+  });
+  const newVal = formatter.format(val);
+  return newVal;
+};
+
 export const balanceTransform = val => {
   if (Number.isNaN(val)) {
     return null;
