@@ -14,13 +14,7 @@ const Wrapper = styled.div`
   border-bottom: 1px solid transparent;
 `;
 
-const Network = styled.div`
-  margin-left: 10px;
-  text-transform: uppercase;
-  justify-self: start;
-`;
-
-export default function TopBar(props) {
+export default function TopBar() {
   return (
     <Wrapper>
       <div />

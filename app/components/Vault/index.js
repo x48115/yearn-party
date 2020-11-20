@@ -4,6 +4,7 @@ import VaultIconAndName from 'components/VaultIconAndName';
 import CountUp from 'react-countup';
 import ValueWithLabel from 'components/ValueWithLabel';
 import { balanceTransform, roundFloat } from 'utils/string';
+import BigNumber from 'bignumber.js';
 
 const Td = styled.td`
   padding: 20px 20px;
@@ -15,20 +16,22 @@ const AmountCounter = styled.div``;
 
 export default function Component(props) {
   const { vault } = props;
-  const {
-    tokenSymbolAlias,
-    earnings,
-    apyOneWeekSample,
-    depositedAmount,
-  } = vault;
+  const { tokenSymbolAlias, statistics, apy, decimals } = vault;
+
+  const { apyOneWeekSample } = apy;
+  const { earnings, depositedAmount } = statistics;
+
+  const earningsNormalized = new BigNumber(earnings)
+    .dividedBy(10 ** decimals)
+    .toNumber();
 
   const apyRatePerHour = apyOneWeekSample / 100 / 365 / 24;
   const nbrSecondsInHour = 3600;
 
   const addSymbol = amount => `${amount} ${tokenSymbolAlias}`;
 
-  const amountTransform = (amount, decimals) => {
-    const nbrDecimals = decimals || 10;
+  const amountTransform = (amount, transformDecimals) => {
+    const nbrDecimals = transformDecimals || 10;
     let newAmount = amount;
     newAmount = balanceTransform(newAmount);
     newAmount = roundFloat(newAmount, nbrDecimals);
@@ -46,7 +49,7 @@ export default function Component(props) {
 
   const deposited = amountTransform(depositedAmount, 4);
 
-  const currentEarnings = earnings * 1;
+  const currentEarnings = earningsNormalized * 1;
   const futureEarnings = futureEarningsPerHour + currentEarnings;
   const vaultEarnings = (
     <AmountCounter>

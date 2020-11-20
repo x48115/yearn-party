@@ -2,6 +2,8 @@
 
 const express = require('express');
 const logger = require('./logger');
+
+// eslint-disable-next-line no-unused-vars
 const _ = require('lodash');
 
 const argv = require('./argv');

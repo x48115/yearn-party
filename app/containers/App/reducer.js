@@ -38,13 +38,17 @@ const appReducer = (state = initialState, action) =>
     };
 
     const addEarningsAndDepositsUsd = vault => {
-      const { priceUsd, earnings, depositedAmount } = vault;
+      const { priceUsd, statistics, decimals } = vault;
+      const { earnings, depositedAmount } = statistics;
       if (priceUsd && earnings) {
-        vault.earningsUsd = new BigNumber(earnings).times(priceUsd).toFixed();
+        vault.earningsUsd = new BigNumber(earnings)
+          .dividedBy(10 ** decimals)
+          .times(priceUsd)
+          .toFixed();
       }
       if (priceUsd && depositedAmount) {
         vault.depositedAmountUsd = new BigNumber(depositedAmount)
-          .dividedBy(10 ** 18)
+          .dividedBy(10 ** decimals)
           .times(priceUsd)
           .toFixed();
       }
@@ -52,7 +56,8 @@ const appReducer = (state = initialState, action) =>
     };
 
     const getAggregateApy = (acc, vault, totalDepositedAmountUsd) => {
-      const { depositedAmountUsd, apyOneWeekSample } = vault;
+      const { depositedAmountUsd, apy } = vault;
+      const { apyOneWeekSample } = apy;
       let ratio;
       if (totalDepositedAmountUsd !== '0') {
         ratio = depositedAmountUsd / totalDepositedAmountUsd;

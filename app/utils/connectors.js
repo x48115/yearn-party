@@ -1,4 +1,3 @@
-import { Connectors } from 'web3-react';
 import { InjectedConnector } from '@web3-react/injected-connector';
 import { TrezorConnector } from '@web3-react/trezor-connector';
 import { TorusConnector } from '@web3-react/torus-connector';

@@ -10,7 +10,7 @@ export function* poll() {
   const account = yield r.select(s.selectAccount());
   while (true) {
     try {
-      const url = `https://dev-api.yearn.tools/user/${account}/vaults?apy=true&statistics=true`;
+      const url = `https://api.yearn.tools/user/${account}/vaults?apy=true&statistics=true`;
       const vaults = yield r.call(request, url);
       yield r.put(a.vaultsLoaded(vaults));
     } catch (err) {
