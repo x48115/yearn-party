@@ -1,6 +1,6 @@
 # YEARN PARTY
 
-View historical and current vault earnings in real time
+Historical archive: First UI and infrastruture built for Yearn for displaying user aggregated earnings
 
 ![alt Recycler](https://i.imgur.com/7XRIVXO.png)
 
